@@ -1,0 +1,28 @@
+# Since this is the first project on PHP 8, it has the docker files.
+# Dont forget to console in and run composer install
+# docker compose up -d
+version: "3"
+
+services:
+  mqtt:
+    image: eclipse-mosquitto:2.0.14
+    container_name: mqtt_clase
+    restart: unless-stopped
+    ports:
+      - 1883:1883
+      - 9001:9001
+    volumes:
+      - type:  bind
+        source: ./mosquitto.conf
+        target: /mosquitto/config/mosquitto.conf
+  php:    
+    restart: unless-stopped
+    #image: php8.3-with-apache:latest
+    build:
+      context: .
+      dockerfile: dockerfilephp
+    container_name: php83_clase
+    volumes:
+      - ./data/:/var/www/html
+    ports:
+      - 9090:80
